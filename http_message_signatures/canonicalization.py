@@ -14,7 +14,10 @@ def normalize_headers(raw):
         value = raw[key]
 
         # strip whitespace around colons (within values)
-        value_stripped_ws = re.sub(r"\s*:\s*", r":", value)
+        try:
+            value_stripped_ws = re.sub(r"\s*:\s*", r":", value)
+        except TypeError: # handle cases where values aren't strings
+            value_stripped_ws = value
 
         # does this key already exist in new_dict?
         if (new_key in new_dict): # key already exists in new_dict; merge values
