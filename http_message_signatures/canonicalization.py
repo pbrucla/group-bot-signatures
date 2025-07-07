@@ -1,6 +1,7 @@
+import re
 def normalize_headers(raw):
     #dict of header-name -> value
-    # lower-case names, strip whitespace TODO, merge duplicates with ", "
+    # lower-case names, strip whitespace, merge duplicates with ", "
 
     # dictionary to be returned
     new_dict = {}
@@ -12,35 +13,17 @@ def normalize_headers(raw):
         # get value
         value = raw[key]
 
+        # strip whitespace around colons (within values)
+        value_stripped_ws = re.sub(r"\s*:\s*", r":", value)
+
         # does this key already exist in new_dict?
         if (new_key in new_dict): # key already exists in new_dict; merge values
             existing_value = new_dict[new_key]
-            value = str(existing_value) + ", " + str(value)
+            new_value = str(existing_value) + ", " + str(value_stripped_ws)
+        else: # key does not yet exist
+            new_value = value_stripped_ws
             
         # update
-        new_dict[new_key] = value
+        new_dict[new_key] = new_value
 
     return new_dict
-
-
-def serialize_field(name, value):
-    # returns a single component line like "\"name\": value"
-    #name must already be lowercased and quoted
-    #TODO: implement field serialization
-    return ""
-
-def join_components(lines):
-    # lines: list of those serialized fields
-    # join with "\n", maybe trailing "\n", then ascii-encode
-    # TODO: implement component joining
-    return b""
-
-
-
-
-# for debugging only TODO remove
-import requests
-session = requests.session()
-request = session.prepare_request(requests.Request('GET', f'https://127.0.0.1'))
-print(request)
-print(normalize_headers(request.headers))
