@@ -13,13 +13,23 @@ def normalize_headers(raw):
         # get value
         value = raw[key]
 
-        # strip whitespace around colons (within values)
-        try:
-            value_stripped_ws = re.sub(r"\s*:\s*", r":", value)
-        except TypeError: # handle cases where values aren't strings
+        try: # strip whitespace (around colons wrapping a base64-encoded value)
+            # find colon-wrapped base64 (RFC 4648), if there is one
+            original_colon_b64 = re.search(r"\s*:\s*[A-Za-z0-9+/=]{64}\s*:\s*", value)
+
+            if (original_colon_b64): # there is one
+                # remove whitespace around colons
+                new_colon_b64 = re.sub(r"\s*:\s*", r":", original_colon_b64[0])
+
+                # substitute in
+                value_stripped_ws = re.sub(r"\s*:\s*[A-Za-z0-9+/=]{64}\s*:\s*", new_colon_b64, value)
+            
+            else: # there isn't one; do nothing
+                value_stripped_ws = value
+
+        except TypeError: # handle cases where values aren't strings (also do nothing)
             value_stripped_ws = value
 
-        # does this key already exist in new_dict?
         if (new_key in new_dict): # key already exists in new_dict; merge values
             existing_value = new_dict[new_key]
             new_value = str(existing_value) + ", " + str(value_stripped_ws)
@@ -43,3 +53,6 @@ def join_components(lines):
     # join with "\n", maybe trailing "\n", then ascii-encode
     # TODO: implement component joining
     return b""
+
+base = {"base64": "bsrid =  :  1js09j1li091j309u41jl1i341223lh58fhpoihi3l2kh08fifjo213e1u0394==  :", "notouch" : ": hey : leave : me : alone :", "notouch_clock" : "Mon 9 June 1969 13:12:11 GMT"}
+print(normalize_headers(base))
