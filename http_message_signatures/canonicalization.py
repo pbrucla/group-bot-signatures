@@ -53,6 +53,3 @@ def join_components(lines):
     # join with "\n", maybe trailing "\n", then ascii-encode
     # TODO: implement component joining
     return b""
-
-base = {"base64": "bsrid =  :  1js09j1li091j309u41jl1i341223lh58fhpoihi3l2kh08fifjo213e1u0394==  :", "notouch" : ": hey : leave : me : alone :", "notouch_clock" : "Mon 9 June 1969 13:12:11 GMT"}
-print(normalize_headers(base))
