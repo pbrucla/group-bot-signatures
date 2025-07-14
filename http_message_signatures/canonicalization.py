@@ -33,5 +33,10 @@ def serialize_field(name, value):
 def join_components(lines):
     # lines: list of those serialized fields
     # join with "\n", maybe trailing "\n", then ascii-encode
-    # TODO: implement component joining
-    return b""
+
+    lines_suffixed = []
+
+    for line in lines:
+        lines_suffixed.append(line + "\n")
+
+    return ascii("".join(lines_suffixed))
