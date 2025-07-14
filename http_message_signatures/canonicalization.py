@@ -34,9 +34,5 @@ def join_components(lines):
     # lines: list of those serialized fields
     # join with "\n", maybe trailing "\n", then ascii-encode
 
-    lines_suffixed = []
-
-    for line in lines:
-        lines_suffixed.append(line + "\n")
-
-    return ascii("".join(lines_suffixed))
+    components_unencoded = "\n".join(lines)
+    return components_unencoded.encode("ascii")
