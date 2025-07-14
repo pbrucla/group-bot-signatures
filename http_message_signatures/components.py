@@ -1,4 +1,4 @@
-from urllib.parse import urlparse, parse_qs     # for parsing urls & query strings
+from urllib.parse import urlparse, parse_qsl     # for parsing urls & query strings
 
 # fixed derived-component extractors
 DERIVED = {
@@ -14,11 +14,10 @@ DERIVED = {
 
 #parses request.url  and return first value of ?param
 def query_param(request, name):   # handles '@query-param';name="param"
-   q_params = parse_qs(urlparse(request.url).query)   # dict returned
-   val = q_params.get(name, "invalid")  # returns invalid if name (key) not found
-   return val
-
-
+    q_params = parse_qsl(urlparse(request.url).query)   # dict returned
+    for key, val in q_params:
+        if key == name: return val   # returns key if found
+    return ""                        # returns empty string if not found
 
 #---------------------------- Testing --------------------------------
 class MockRequest:
@@ -28,4 +27,4 @@ class MockRequest:
 
 r = MockRequest("https://www.example.com/product?affiliate_id=56789")
 print(query_param(r, "affiliate_id"))   # prints 56789
-print(query_param(r, "name"))   # prints invalid
+print(query_param(r, "name"))   # prints nothing (empty string)
