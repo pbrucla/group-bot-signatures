@@ -27,12 +27,12 @@ def normalize_headers(raw):
 
 def serialize_field(name, value):
     # returns a single component line like "\"name\": value"
-    #name must already be lowercased and quoted
-    #TODO: implement field serialization
-    return ""
+    #name must already be lowercased
+    return f"\"{name}\": {value}"
 
 def join_components(lines):
     # lines: list of those serialized fields
     # join with "\n", maybe trailing "\n", then ascii-encode
-    # TODO: implement component joining
-    return b""
+
+    components_unencoded = "\n".join(lines) + "\n"
+    return components_unencoded.encode("ascii")
