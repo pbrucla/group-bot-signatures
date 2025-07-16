@@ -9,7 +9,7 @@ def build_signature_input(label, covered, params):
         else:
             parts.append(f'{k}="{v}"')
     params_str = ";".join(parts)
-    # assemble (without label - label is added by caller)
+    # assemble without label
     return f'({covered_str});{params_str}'
 
 
