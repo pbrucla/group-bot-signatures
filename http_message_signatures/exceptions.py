@@ -21,10 +21,3 @@ class ParameterError(SignatureError):
 class VerificationError(SignatureError):
     #signature does not verify
     pass
-
-
-#---------------------------- Testing --------------------------------
-comp = "http"
-raise CanonicalizationError(f"@query-param missing name: {comp}")
-#raise VerificationError("missing keyid in signature parameters")
-
