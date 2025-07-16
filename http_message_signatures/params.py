@@ -41,12 +41,11 @@ def parse_signature_input(header_value):
     if start_paren == -1 or end_paren == -1 or end_paren < start_paren:
         raise ValueError("Unmatched or invalid parentheses in covered list")
 
-    if len(set(covered_list)) != len(covered_list):
-        raise ValueError("Duplicate covered components detected")
-
-
     covered_str = rest[1:end_paren]
     covered_list = [item.strip('"') for item in covered_str.split()]
+
+    if len(set(covered_list)) != len(covered_list):
+        raise ValueError("Duplicate covered components detected")
 
     # extract params
     param_str = rest[end_paren+1:].lstrip("; ")
