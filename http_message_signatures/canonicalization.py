@@ -4,9 +4,10 @@ def normalize_headers(raw):
 
     # dictionary to be returned
     new_dict = {}
-
-    for key in raw: # iterate through dictionary
+    print(type(raw))
+    for key in raw.keys(): # iterate through dictionary
         # normalize the key (lowercase, strip whitespace)
+        print(key)
         new_key = key.lower().strip()
 
         # get value
@@ -34,5 +35,5 @@ def join_components(lines):
     # lines: list of those serialized fields
     # join with "\n", maybe trailing "\n", then ascii-encode
 
-    components_unencoded = "\n".join(lines) + "\n"
+    components_unencoded = "\n".join(lines)
     return components_unencoded.encode("ascii")

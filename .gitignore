@@ -17,6 +17,7 @@ instance/
 *.egg
 
 jwks.json
+debug-resp.html
 
 .vscode/
 .idea/
