@@ -4,10 +4,9 @@ def normalize_headers(raw):
 
     # dictionary to be returned
     new_dict = {}
-    print(type(raw))
+
     for key in raw.keys(): # iterate through dictionary
         # normalize the key (lowercase, strip whitespace)
-        print(key)
         new_key = key.lower().strip()
 
         # get value
