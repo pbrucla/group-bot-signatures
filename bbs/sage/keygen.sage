@@ -1,13 +1,4 @@
-# bls12-381 params using z param method
-z  = -0xd201000000010000
-p  = ZZ(z + ((z - 1)**2) * (z**4 - z**2 + 1) // 3)
-r  = ZZ(z**4 - z**2 + 1)
-h1 = ZZ(((z - 1)**2) // 3)
-h2 = ZZ((z**8 - 4*z**7 + 5*z**6 - 4*z**4 + 6*z**3 - 4*z**2 - 4*z + 13) // 9)
-Fp      = GF(p, proof=False)
-Fp2.<i>  = Fp.extension(2, 'i', proof=False)
-E1 = EllipticCurve(Fp,  [0, 4])
-E2 = EllipticCurve(Fp2, [0, 4])
+from BLS12381 import *
 
 # base64url helpers
 import base64, sys, random
@@ -81,4 +72,4 @@ print("xi2", _b64(_i2b(ξ2)))
 print("#member secrets")
 for i,(A,x) in enumerate(members,1):
     print(f"member{i:02d}_A", _b64(g1_bytes(A)))
-    print(f"member{i:02d}_x", _b64(_i2b(x)))
+    print(f"member{i:02d}_x", (_i2b(x)))
