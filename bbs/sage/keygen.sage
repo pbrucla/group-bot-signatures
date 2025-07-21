@@ -4,7 +4,6 @@ from contextlib import redirect_stdout
 with open('output.txt', 'w') as f, redirect_stdout(f):
     try:
         from BLS12381 import *
-        from util import b64, int_to_bytes, g1_bytes, g2_bytes
     except ImportError:
         load('bls12381.sage')
 
