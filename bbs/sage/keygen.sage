@@ -1,22 +1,5 @@
 from BLS12381 import *
-
-# base64url helpers
-import base64, sys, random
-Lbytes = (p.nbits() + 7)//8
-
-def _b64(b): return base64.urlsafe_b64encode(b).rstrip(b'=').decode()
-def _i2b(x, L=Lbytes): return int(x).to_bytes(L, 'big')
-
-def g1_bytes(P):
-    return b'\x00' if P.is_zero() else b'\x04'+_i2b(P[0])+_i2b(P[1])
-
-def g2_bytes(Q):
-    if Q.is_zero():
-        return b'\x00'
-    x, y  = Q[0], Q[1]
-    x0, x1 = x[0], x[1]
-    y0, y1 = y[0], y[1]
-    return (b'\x04' + _i2b(x0) + _i2b(x1) + _i2b(y0) + _i2b(y1))
+from util import b64, int_to_bytes, g1_bytes, g2_bytes
 
 # random points in g1 and g2
 def rand_G1():
@@ -58,18 +41,18 @@ for _ in range(n_members):
 
 #print everything base64 encoded
 print("#group public key:")
-print("g1", _b64(g1_bytes(g1)))
-print("g2", _b64(g2_bytes(g2)))
-print("h",  _b64(g1_bytes(h)))
-print("u",  _b64(g1_bytes(u)))
-print("v",  _b64(g1_bytes(v)))
-print("w",  _b64(g2_bytes(w)))
+print("g1", b64(g1_bytes(g1)))
+print("g2", b64(g2_bytes(g2)))
+print("h",  b64(g1_bytes(h)))
+print("u",  b64(g1_bytes(u)))
+print("v",  b64(g1_bytes(v)))
+print("w",  b64(g2_bytes(w)))
 
 print("#manager secret")
-print("xi1", _b64(_i2b(ξ1)))
-print("xi2", _b64(_i2b(ξ2)))
+print("xi1", b64(int_to_bytes(ξ1)))
+print("xi2", b64(int_to_bytes(ξ2)))
 
 print("#member secrets")
 for i,(A,x) in enumerate(members,1):
-    print(f"member{i:02d}_A", _b64(g1_bytes(A)))
-    print(f"member{i:02d}_x", (_i2b(x)))
+    print(f"member{i:02d}_A", b64(g1_bytes(A)))
+    print(f"member{i:02d}_x", b64(int_to_bytes(x)))
