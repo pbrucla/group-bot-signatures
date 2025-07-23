@@ -22,7 +22,7 @@ def sign(gpk, gsk, msg):
 
     R_1 = u * r_1
     R_2 = v * r_2
-    R_3 = compute_pairing(T_3, g2) ^ r_3 + compute_pairing(h, w) ^ ((-1 * r_1) - r_2) + compute_pairing(h, g2) ^ ((-1 * r_4) - r_5)
+    R_3 = compute_pairing(T_3, g2) ^ r_3 * compute_pairing(h, w) ^ ((-1 * r_1) - r_2) * compute_pairing(h, g2) ^ ((-1 * r_4) - r_5)
     R_4 = (T_1 * r_3) + (u * r_4 * -1)
     R_5 = (T_2 * r_3) + (v * r_5 * -1)
 
