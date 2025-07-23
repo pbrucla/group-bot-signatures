@@ -30,11 +30,11 @@ def sign(gpk, gsk, msg):
     challenge = create_challenge_hash(msg, T_1, T_2, T_3, R_1, R_2, R_3, R_4, R_5)
 
     # construct s values
-    s_1 = r_1 + challenge + α
-    s_2 = r_2 + challenge + β
-    s_3 = r_3 + challenge + x_i
-    s_4 = r_4 + challenge + (x_i + α)
-    s_5 = r_5 + challenge + (x_i + β)
+    s_1 = r_1 + challenge * α
+    s_2 = r_2 + challenge * β
+    s_3 = r_3 + challenge * x_i
+    s_4 = r_4 + challenge * (x_i * α)
+    s_5 = r_5 + challenge * (x_i * β)
 
     # return signature
     return T_1, T_2, T_3, challenge, s_1, s_2, s_3, s_4, s_5
