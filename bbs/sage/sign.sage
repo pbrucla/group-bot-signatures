@@ -26,7 +26,7 @@ def sign(gpk, gsk, msg):
     R_4 = (T_1 * r_3) + (u * r_4 * -1)
     R_5 = (T_2 * r_3) + (v * r_5 * -1)
 
-    # compute challenge TODO await fix to create_challenge_hash
+    # compute challenge
     challenge = create_challenge_hash(msg, T_1, T_2, T_3, R_1, R_2, R_3, R_4, R_5)
 
     # construct s values
