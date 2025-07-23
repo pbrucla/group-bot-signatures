@@ -7,7 +7,7 @@ with open('output.txt', 'w') as f, redirect_stdout(f):
     except ImportError:
         load('bls12381.sage')
 
-    from util import b64, int_to_bytes, g1_bytes, g2_bytes
+    from util import *
     # random points in g1 and g2
     def rand_G1():
         while True:
@@ -45,12 +45,12 @@ with open('output.txt', 'w') as f, redirect_stdout(f):
 
     #print everything base64 encoded
     print("#group public key:")
-    print("g1", b64(g1_bytes(g1)))
-    print("g2", b64(g2_bytes(g2)))
-    print("h",  b64(g1_bytes(h)))
-    print("u",  b64(g1_bytes(u)))
-    print("v",  b64(g1_bytes(v)))
-    print("w",  b64(g2_bytes(w)))
+    print("g1", b64(E1_point_to_bytes(g1)))
+    print("g2", b64(E2_point_to_bytes(g2)))
+    print("h",  b64(E1_point_to_bytes(h)))
+    print("u",  b64(E1_point_to_bytes(u)))
+    print("v",  b64(E1_point_to_bytes(v)))
+    print("w",  b64(E2_point_to_bytes(w)))
 
     print("#manager secret")
     print("xi1", b64(int_to_bytes(ξ1)))
@@ -58,5 +58,5 @@ with open('output.txt', 'w') as f, redirect_stdout(f):
 
     print("#member secrets")
     for i,(A,x) in enumerate(members,1):
-        print(f"member{i:02d}_A", b64(g1_bytes(A)))
+        print(f"member{i:02d}_A", b64(E1_point_to_bytes(A)))
         print(f"member{i:02d}_x", b64(int_to_bytes(x)))
