@@ -37,7 +37,7 @@ def verify(gpk, M, sigma):
     R3 = e_T3_g2^(s_x) * e_h_w^(-s_alpha - s_beta) * e_h_g2^(-s_delta1 - s_delta2) * (e_T3_w / e_g1_g2)^c
 
     # Re-compute c, call it c'
-    c_prime = create_challenge_hash(T1, T2, T3, R1, R2, R3, R4, R5)
+    c_prime = create_challenge_hash(msg, T1, T2, T3, R1, R2, R3, R4, R5)
 
     # Accept if c' == c, otherwise reject
     return c_prime == c
