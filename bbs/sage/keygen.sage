@@ -5,7 +5,7 @@ with open('output.txt', 'w') as f, redirect_stdout(f):
     try:
         from BLS12381 import *
     except ImportError:
-        load('bls12381.sage')
+        load('BLS12381.sage')
 
     from util import *
     # random points in g1 and g2
