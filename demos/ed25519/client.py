@@ -10,10 +10,16 @@ JWKS_URL = 'http://localhost:5001/.well-known/http-message-signatures-directory'
 session = requests.Session()
 
 def main():
+    # generate fresh Ed25519 keypair
     signing_key = SigningKey.generate()
     verify_key  = signing_key.verify_key
+
+    # choose a keyid for this demo user
     keyid = 'mykey'
+
     pub_b64url = base64.urlsafe_b64encode(verify_key.encode()).decode().rstrip('=')
+
+    # write jwks.json for JWKS server to serve
     jwk = {
       "keys": [
         {
