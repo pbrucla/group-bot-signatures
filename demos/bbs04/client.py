@@ -1,48 +1,58 @@
-#!/usr/bin/env python3
-import sys, os, json, base64
+import time
+import base64
+import json
 import requests
+from nacl.signing import SigningKey
+from http_message_signatures import sign_request
 
-this_dir = os.path.dirname(os.path.abspath(__file__))
-project_rt = os.path.abspath(os.path.join(this_dir, '..', '..'))
-sys.path.insert(0, project_rt)
-
-from bbs.core import sign, GroupPK, MemberSK
-
-# load keys
-here = this_dir = os.path.dirname(os.path.abspath(__file__))
-with open(os.path.join(here, 'keys', 'group_pk.json')) as f:
-    gdata = json.load(f)
-with open(os.path.join(here, 'keys', 'm01.json')) as f:
-    mdata = json.load(f)
-
-gpk = GroupPK(
-    g1=base64.urlsafe_b64decode(gdata['g1'] + '=='),
-    g2=base64.urlsafe_b64decode(gdata['g2'] + '=='),
-    h =base64.urlsafe_b64decode(gdata['h']  + '=='),
-    u =base64.urlsafe_b64decode(gdata['u']  + '=='),
-    v =base64.urlsafe_b64decode(gdata['v']  + '=='),
-    w =base64.urlsafe_b64decode(gdata['w']  + '=='),
-)
-m01 = MemberSK(
-    A  =base64.urlsafe_b64decode(mdata['A'] + '=='),
-    x  =base64.urlsafe_b64decode(mdata['x'] + '=='),
-    kid=mdata['kid']
-)
-
-# message to sign
 SERVER = 'http://localhost:8000'
-msg = f"GET /verify localhost:8000".encode()
-
-# produce signature
-sig = sign(msg, m01, gpk)
-sig_b64 = sig.to_base64()
-
-# send HTTP request
+JWKS_URL = 'http://localhost:5001/.well-known/http-message-signatures-directory'
 session = requests.Session()
-req     = requests.Request('GET', f'{SERVER}/verify')
-prepped = session.prepare_request(req)
-prepped.headers['Signature'] = sig_b64
-prepped.headers['Signature-Agent']='http://localhost:5001/.well-known/http-message-signatures-directory'
 
-resp = session.send(prepped)
-print('verify response:', resp.status_code, resp.text)
+def main():
+    signing_key = SigningKey.generate()
+    verify_key  = signing_key.verify_key
+    keyid = 'mykey'
+    pub_b64url = base64.urlsafe_b64encode(verify_key.encode()).decode().rstrip('=')
+    jwk = {
+      "keys": [
+        {
+          "kid": keyid,
+          "kty": "OKP",
+          "crv": "Ed25519",
+          "x": pub_b64url
+        }
+      ]
+    }
+    with open('jwks.json', 'w') as f:
+        json.dump(jwk, f)
+    print('jwks.json written with public key x', pub_b64url)
+
+    # prepare an HTTP request to sign
+    req = requests.Request('GET', f'{SERVER}/verify')
+    prepped = session.prepare_request(req)
+
+    # define covered components and signature parameters
+    covered = ['@method', '@path', '@authority']
+    now = int(time.time())
+    params = {
+        'keyid': keyid,
+        'alg':   'ed25519',
+        'created': now,
+        'expires': now + 300
+    }
+
+    # sign the request
+    sig_headers = sign_request(prepped, signing_key, covered, params)
+    # include in-band key directory discovery
+    sig_headers['Signature-Agent'] = JWKS_URL
+
+    prepped.headers.update(sig_headers)
+
+    # send signed request
+    response = session.send(prepped)
+    print('verify response:', response.status_code, response.text)
+
+
+if __name__ == '__main__':
+    main()
