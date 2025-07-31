@@ -4,8 +4,6 @@ import os, sys, subprocess, json, base64
 from dataclasses import dataclass
 from typing import List
 
-# ─── Data models ─────────────────────────────────────────────────────────────
-
 @dataclass
 class GroupPK:
     g1: bytes; g2: bytes; h: bytes
@@ -65,7 +63,6 @@ class BbsSignature:
     def to_base64(self) -> str:
         return base64.urlsafe_b64encode(self.to_bytes()).rstrip(b'=').decode()
 
-# ─── Key Generation ──────────────────────────────────────────────────────────
 
 def generate_group_keys(n_members: int = 1) -> GroupBundle:
     sage_dir = os.path.join(os.path.dirname(__file__), 'sage')
@@ -117,8 +114,6 @@ def generate_group_keys(n_members: int = 1) -> GroupBundle:
         ))
     return GroupBundle(group_pk=gpk, manager_sk=msk, members=members)
 
-# ─── CLI Invocation Helpers ─────────────────────────────────────────────────
-
 def _run_cli(script_name: str, payload: dict) -> dict:
     sage_dir = os.path.join(os.path.dirname(__file__), 'sage')
     cli_path = os.path.join(sage_dir, script_name)
@@ -132,7 +127,6 @@ def _run_cli(script_name: str, payload: dict) -> dict:
         raise RuntimeError(f"{script_name} failed:\n{proc.stderr}")
     return json.loads(proc.stdout)
 
-# ─── Sign & Verify ──────────────────────────────────────────────────────────
 
 def sign(msg: bytes, member: MemberSK, group: GroupPK) -> BbsSignature:
     payload = {
