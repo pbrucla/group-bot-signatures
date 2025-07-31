@@ -1,7 +1,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
-http_message_signatures/__pycache__
+http_message_signatures/__pycache__/
 
 env/
 venv/
@@ -11,17 +11,26 @@ build/
 dist/
 *.egg-info/
 pip-wheel-metadata/
+*.egg
 
 instance/
 
-*.egg
-
-jwks.json
+*.log
 debug-resp.html
 
 .vscode/
 .idea/
 *.swp
+
 .DS_Store
 
-*.log
+jwks.json
+
+bbs/sage/*.sage.py
+bbs/sage/output.txt
+demos/bbs04/output.txt
+output.txt
+
+demos/bbs04/keys/
+
+jwks.json
