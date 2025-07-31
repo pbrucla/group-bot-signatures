@@ -12,6 +12,7 @@ h2 = ZZ((z**_sage_const_8  - _sage_const_4 *z**_sage_const_7  + _sage_const_5 *z
 k = _sage_const_12 
 
 Fp      = GF(p, proof=False)
+Fr      = GF(r, proof=False)
 R = PolynomialRing(Fp, names=('x',)); (x,) = R._first_ngens(1)
 Fp2 = Fp.extension(x**_sage_const_2  + _sage_const_1 , names=('u',)); (u,) = Fp2._first_ngens(1)
 

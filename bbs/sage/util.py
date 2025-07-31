@@ -2,6 +2,7 @@ from BLS12381 import *
 import base64, hashlib
 
 Lbytes = (p.nbits() + 7)//8
+Rbytes = (r.nbits() + 7)//8
 
 def b64(b): return base64.urlsafe_b64encode(b).rstrip(b'=').decode()
 def int_to_bytes(x, L=Lbytes): return int(x).to_bytes(L, 'big')
@@ -69,4 +70,4 @@ def create_challenge_hash(msg, T1, T2, T3, R1, R2, R3, R4, R5):
     h.update(poly_to_bytes(R3))
     h.update(E1_point_to_bytes(R4))
     h.update(E1_point_to_bytes(R5))
-    return Fp(int.from_bytes(h.digest(), "big"))
+    return Fr(int.from_bytes(h.digest(), "big"))

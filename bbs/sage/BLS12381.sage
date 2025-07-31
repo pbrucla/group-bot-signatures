@@ -6,6 +6,7 @@ h2 = ZZ((z**8 - 4*z**7 + 5*z**6 - 4*z**4 + 6*z**3 - 4*z**2 - 4*z + 13) // 9)
 k = 12
 
 Fp      = GF(p, proof=False)
+Fr      = GF(r, proof=False)
 R.<x> = PolynomialRing(Fp)
 Fp2.<u>  = Fp.extension(x^2 + 1)
 
